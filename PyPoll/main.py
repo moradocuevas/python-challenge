@@ -4,17 +4,17 @@ import csv
 #Retrieves the document
 #electioncsv = os.path.join('..''Resources', 'election_data.csv')(Regresar a este antes de enviarlo)
 electioncsv="/Users/moradocuevas/Dropbox/TecBootCamp/python-challenge/PyPoll/Resources/election_data.csv"
-electiondata=
+electiondata=os.path.join("Resources","election_brief.txt")
 # Method 2: Improved Reading using CSV module
 
 m=0
 
 votes=[]
-candidate=[]
+#candidate=[]
 data=[]
 cand_op=[]
 cand_vot={}
-winning_candidate=""
+#winning_candidate="
 
 
 with open(electioncsv, newline='') as csvfile:
@@ -28,11 +28,15 @@ with open(electioncsv, newline='') as csvfile:
         data.append(row)
         votes.append(row[0])
         m=m+1
-        candidate.append(row[2])
+        #candidate.append(row[2])
         candidate_name=(row[2])
         if candidate_name not in cand_op:
             cand_op.append(candidate_name)
-        cand_vot[candidate_name]=cand_vot[candidate_name]+1
+        if candidate_name not in cand_vot:
+            cand_vot[candidate_name] = 0    
+        cand_vot[candidate_name] = cand_vot[candidate_name]+1
+        
+        
 
 #averages=[(x+y)/2.0 for (x,y) in zip(pl[:-1], pl[1:])]
 #print(averages)
@@ -40,35 +44,42 @@ with open(electioncsv, newline='') as csvfile:
 #pl=[int(i) for i in pl]
 #plsum=(sum(pl))
 
-with open(electiondata, newline='') as textfile:
+
 
 election_res=(
-f"\n Election Results \n"
-f"----------------------------\n"
-f"Total Votes: {m} \n"
-f"----------------------------\n")
+    f"\n Election Results \n"
+    f"----------------------------\n"
+    f"Total Votes: {m} \n"
+    f"----------------------------\n")
 print(election_res, end="")
 
 
+winning_count = 0
+
 for candidate in cand_vot:
-    votes=candidate_name.get(candidate)
-    vote_per=float(votes)/float(total_votes)*100
-    if(votes>winning_count):
-        winning_count=votes
-        winning_canditate=candidate
+    
+    votes=cand_vot[candidate]
+
+    if votes > winning_count:
+        winning_count = votes
+        winning_candidate = candidate
+
+    vote_percentage=float(votes)/float(m)*100
+    vote_percentage=round(vote_percentage)
 
     voter_output= f"{candidate}:{vote_percentage:3f}% ({votes})\n"
     print ((voter_output), end="")
 #txt_file.write(voter_output)
+#print(winning_candidate)
 
 winning_candidate_summary=(
 
-    f"----------------------------"
+    f"----------------------------\n"
     f"Winner: {winning_candidate}\n"
     f"----------------------------")
 print(winning_candidate_summary)
 
-with open(electiondata, newline='') as textfile:
-    electiondata.write(election_res)
-    electiondata.write(voter_output)
-    electiondata.write(winning_candidate_summary)
+writer=open(electiondata, "w")
+writer.write(election_res)
+writer.write(voter_output)
+writer.write(winning_candidate_summary)
