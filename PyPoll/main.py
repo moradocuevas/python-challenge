@@ -4,6 +4,7 @@ import csv
 #Retrieves the document
 #electioncsv = os.path.join('..''Resources', 'election_data.csv')(Regresar a este antes de enviarlo)
 electioncsv="/Users/moradocuevas/Dropbox/TecBootCamp/python-challenge/PyPoll/Resources/election_data.csv"
+electiondata=
 # Method 2: Improved Reading using CSV module
 
 m=0
@@ -11,6 +12,9 @@ m=0
 votes=[]
 candidate=[]
 data=[]
+cand_op=[]
+cand_vot={}
+winning_candidate=""
 
 
 with open(electioncsv, newline='') as csvfile:
@@ -25,28 +29,46 @@ with open(electioncsv, newline='') as csvfile:
         votes.append(row[0])
         m=m+1
         candidate.append(row[2])
-print(m)
+        candidate_name=(row[2])
+        if candidate_name not in cand_op:
+            cand_op.append(candidate_name)
+        cand_vot[candidate_name]=cand_vot[candidate_name]+1
 
-
-"""averages=[(x+y)/2.0 for (x,y) in zip(pl[:-1], pl[1:])]
-pritn
-print(averages )
+#averages=[(x+y)/2.0 for (x,y) in zip(pl[:-1], pl[1:])]
+#print(averages)
 #plsum=sum(pl)
-pl=[int(i) for i in pl]
-plsum=(sum(pl))
+#pl=[int(i) for i in pl]
+#plsum=(sum(pl))
+
+with open(electiondata, newline='') as textfile:
+
+election_res=(
+f"\n Election Results \n"
+f"----------------------------\n"
+f"Total Votes: {m} \n"
+f"----------------------------\n")
+print(election_res, end="")
 
 
-print("Election Results")
-print("----------------------------")
-print("Total Votes: "+  str (m))
-print("----------------------------")
-print("Total: "+ "$"+ str())
-#print("Average change: " + str(plav))
-print("Greatest increase in Profits: "+ str())
-print()
+for candidate in cand_vot:
+    votes=candidate_name.get(candidate)
+    vote_per=float(votes)/float(total_votes)*100
+    if(votes>winning_count):
+        winning_count=votes
+        winning_canditate=candidate
 
-#Net total amount of "profit/losses"
+    voter_output= f"{candidate}:{vote_percentage:3f}% ({votes})\n"
+    print ((voter_output), end="")
+#txt_file.write(voter_output)
 
-#Average change in profits
-#Greatest increase in profit (date and amount)
-#Decrease in losses (date and amount)"""
+winning_candidate_summary=(
+
+    f"----------------------------"
+    f"Winner: {winning_candidate}\n"
+    f"----------------------------")
+print(winning_candidate_summary)
+
+with open(electiondata, newline='') as textfile:
+    electiondata.write(election_res)
+    electiondata.write(voter_output)
+    electiondata.write(winning_candidate_summary)
